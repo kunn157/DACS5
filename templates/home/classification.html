@@ -1,0 +1,104 @@
+{% extends 'home/base.html' %}
+{% block placeholder %}
+    <div class="page-heading" id="top">
+        <div class="container ">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="inner-content">
+                        <h2>Recommendation about eye glasses</h2>
+                        <span>Predict shape face and recommendation glasses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container w-75">
+    <span class="" style="font-style: italic;font-size: 10px" >Please choose suitable image</span>
+        <div class="row">
+
+            <label class="label btn btn-success col-lg-3 m-2">
+
+                        <input type="file" style="display: none" onchange="readURL(this)" required/>
+                        <span>Select a file</span>
+            </label>
+{#            <a class="btn btn-outline-dark col-lg-3 m-2" id="start-camera">Using Camera</a>#}
+            <div class="mt-3 ml-3 col-lg-3" style="font-weight: bold">Result:
+                <span id="result" >
+                 {% if face %}
+                     {{ face }}
+                 {% else %}
+                      No result
+                 {% endif %}
+                </span>
+            </div>
+
+            {% if not face %}
+            <div  class="col-lg-12" >
+                <div class="row mt-3">
+                    <div style="height: 520px; width: 280px" class="mt-3">
+                        <img id="blah" style="display: none; width: 100%"   src="#" alt="your image" />
+                    </div>
+                    <video class="col-lg-6" id="video" autoplay  ></video>
+                    <canvas class="col-lg-6" id="canvas" ></canvas>
+
+                </div>
+            </div>
+            {% endif %}
+            <button class="btn btn-dark col-lg-2 m-2 mt-3" id="click-photo" style="display: none">Click Photo</button>
+            <form id="predict" action="classify" class="col-lg-6 row" method="POST" style="display: none">
+                {% csrf_token %}
+                <input type="submit" class="btn btn-outline-info col-lg-2 m-2 mt-3" value="Predict">
+                <select class="form-select mt-3 m-2 col-lg-3" name="gender" id="" required>
+                    <option value="" selected disabled>None</option>
+                    <option >Kids</option>
+                    <option >Men</option>
+                    <option >Women</option>
+                </select>
+            </form>
+
+{#            <a href="classify" class="btn btn-outline-info col-lg-2 m-2 mt-3" id="predict" style="display: none">Predict</a>#}
+{#            <select class="form-select mt-3 m-2 col-lg-3" id="gender_id" style="display: none" required>#}
+{#              <option selected disabled>Gender</option>#}
+{#              <option value="1">Kids</option>#}
+{#              <option value="2">Women</option>#}
+{#              <option value="3">Men</option>#}
+{#            </select>#}
+        </div>
+    {% if face %}
+        <div id="face">
+            <section class="section result" id="{{ gender }}">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="men-item-carousel">
+                                <div class="row">
+                                    {% for item in items_3 %}
+                                    <div class="item col-lg-3 col-xs-12 col-sm-6 col-md-4 mt-5 mb-3">
+                                        <div class="thumb"  style="border: 1px solid #ebebeb; padding: 5px; border-radius: 2px">
+                                            <div class="hover-content">
+                                                <ul>
+                                                    <li><a href="/single-product/{{ item.id }}"><i class="fa fa-eye"></i></a></li>
+                                                    <li><a href="javascript:void(0)" onclick="addCart({{ item.id }})" ><i class="fa fa-shopping-cart"></i></a></li>
+                                                </ul>
+                                            </div>
+                                            <img class="p-4 w-100" src="{{ item.image }}" alt="{{ item.product }}">
+                                        </div>
+                                        <div class="down-content">
+                                            <h5 style="color: #0c5460">{{ item.product }}</h5>
+                                            <p style="font-size: 15px; color: #ffc107">${{ item.price }}</p>
+                                            <span style="font-size: 15px">{{ item.description }}</span>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    {% endif %}
+    </div>
+{% endblock %}

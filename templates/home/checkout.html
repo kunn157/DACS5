@@ -1,0 +1,203 @@
+{% extends 'home/base.html' %}
+{% load mathfilters %}
+{% block placeholder %}
+
+    <!-- ***** Main Banner Area Start ***** -->
+    <div class="page-heading about-page-heading" id="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="inner-content">
+                        <h2>Checkout</h2>
+                        <span>Create orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+
+    <!-- ***** Contact Area Starts ***** -->
+    <div class="contact-us">
+        <div class="container">
+            <div class="row " style="height: 522px">
+                <div class="col-lg-6 ">
+                    <div class="section-heading">
+                        <h2 class="text-primary">Cart</h2>
+                    </div>
+                    <div style="height: 370px">
+                        <table >
+                            {% if 'cart' in request.session %}
+                                <input value="{{ request.session.cart }}" type="hidden" id="session_hidden">
+                                {% for key, value in request.session.cart.items %}
+                                    <tr class="" style="border: #95999c solid 0.5px; border-radius: 5px; box-shadow: 7px 7px #80bdff; padding: 7px">
+                                        <input type="hidden" id="keyProduct" value="{{ key }}" >
+                                        <td class="w-25"><img class="w-100" src="{{ value.image }}"></td>
+                                        <td class="p-4">
+                                            <div class="product-title" style="font-size: 13px">{{ value.name }}</div>
+                                            <p style="color: #95999c;font-size: 7px" class="font-italic product-description">{{ value.description }}</p>
+                                        </td>
+                                        <td><div class="product-price" >$<span>{{ value.price }}</span><input type="hidden" id="priceProduct{{ key }}" value="{{ value.price }}"></div></td>
+                                        <td>
+                                            <div class="product-quantity">
+                                                <span>SL: {{ value.number }}</span>
+                                            </div>
+                                        </td>
+                                        <td><div class="product-line-price" >$<span id="linePrice{{ key }}">{{ value.price|mul:value.number }}</span></div></td>
+                                    </tr>
+                                {% endfor %}
+                            {% endif %}
+
+                        </table>
+                    </div>
+                <hr>
+                    <div class="row">
+                        <div class="col-lg-9">
+                            <div class="price">
+                              <div>
+                                  <ul>
+                                      <li class="d-flex">
+                                          <p class="mr-5 mr-auto" style="color: #95999c;font-size: 14px">Subtotal</p>
+                                          <span class="p-l-5 ml-auto" >$<span id="total"></span></span>
+                                      </li>
+                                      <li class="d-flex">
+                                          <p class="mr-5 mr-auto" style="color: #95999c;font-size: 14px">Tax(3%) - Shipping</p>
+                                          <span class="p-l-5 ml-auto">$<span id="tax"></span></span>
+                                      </li>
+                                      <li class="d-flex">
+                                          <p class="mr-5" style="color: #95999c;font-size: 14px">Grand Total </p>
+                                          <span class="p-l-5 ml-auto">$<span id="grandTotal"></span></span>
+                                      </li>
+                                  </ul>
+                              </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-3">
+                            <a data-toggle="modal" data-target=".bd-example-modal-lg" class="btn btn-sm btn-outline-primary ">Update Cart</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="section-heading">
+                        <h2>Information about Checkout</h2>
+                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                    </div>
+                    <form id="contact" action="order" method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <fieldset>
+                                  <input name="name" type="text" id="name" placeholder="First Name" required="">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6">
+                                <fieldset>
+                                  <input name="last_name" type="text" id="last_name" placeholder="Last Name" required="">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6 mt-4">
+                                <fieldset>
+                                  <input name="phone" type="text" id="phone" placeholder="Phone number" required="">
+                                </fieldset>
+                            </div>
+                            <div class="col-lg-6 mt-4">
+                                <fieldset>
+                                  <input name="email" type="text" id="email" placeholder="Your email" required="">
+                                </fieldset>
+                            </div>
+                        </div>
+                        <div class="row mt-3" >
+                            <fieldset class="col-lg-4">
+                                <select class="form-select form-select-lg w-100" name="add1" style="height: 43px;font-size: 14px;color: #7e7d7d;font-style: italic;" id="city" aria-label=".form-select-lg">
+                                    <option value="" selected>City</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="col-lg-4 ">
+                                <select class="form-select form-select-lg w-100" name="add2" style="height: 43px;font-size: 14px;color: #7e7d7d;font-style: italic;" id="district" aria-label=".form-select-lg">
+                                        <option value="" selected>District</option>
+                                </select>
+                            </fieldset>
+                            <fieldset class="col-lg-4">
+                                <select class="form-select form-select-lg w-100" name="add3" style="height: 43px;font-size: 14px;color: #7e7d7d;font-style: italic;" id="ward" aria-label=".form-select-lg">
+                                        <option value="" selected>Ward</option>
+                                </select>
+                            </fieldset>
+
+                        </div>
+                        <div class="row mt-3">
+                            <fieldset class="col-lg-12">
+                                <select class="form-select form-select-lg w-100" name="payment" style="height: 43px;font-size: 14px;color: #7e7d7d;font-style: italic;" aria-label=".form-select-lg" required>
+                                        <option value="" selected>Payment</option>
+                                        <option>Payment by cash</option>
+
+                                </select>
+                            </fieldset>
+                        </div>
+                        <div class="row">
+                                <fieldset class="col-lg-12">
+                                  <textarea name="message" rows="6" id="message" placeholder="Your message" required=""></textarea>
+                                </fieldset>
+                        </div>
+                        <div class="row">
+                            <fieldset class="col-lg-12">
+                                    <button type="submit" id="form-submit" class="main-dark-button"><i class="fa fa-paper-plane"></i></button>
+                            </fieldset>
+                        </div>
+                      </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Contact Area Ends ***** -->
+
+    <!-- ***** Subscribe Area Starts ***** -->
+    <div class="subscribe">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="section-heading">
+                        <h2>By Subscribing To Our Newsletter You Can Get 30% Off</h2>
+                        <span>Details to details is what makes Hexashop different from the other themes.</span>
+                    </div>
+                    <form id="subscribe" action="" method="get">
+                        <div class="row">
+                          <div class="col-lg-5">
+                            <fieldset>
+                              <input name="name" type="text" id="name" placeholder="Your Name" required="">
+                            </fieldset>
+                          </div>
+                          <div class="col-lg-5">
+                            <fieldset>
+                              <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email Address" required="">
+                            </fieldset>
+                          </div>
+                          <div class="col-lg-2">
+                            <fieldset>
+                              <button type="submit" id="form-submit" class="main-dark-button"><i class="fa fa-paper-plane"></i></button>
+                            </fieldset>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <ul>
+                                <li>Store Location:<br><span>Da Nang, Viet Nam</span></li>
+                                <li>Phone:<br><span>010-020-0340</span></li>
+                                <li>Office Location:<br><span>ABC Building</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul>
+                                <li>Work Hours:<br><span>07:30 AM - 9:30 PM Daily</span></li>
+                                <li>Email:<br><span>glasseseye@company.com</span></li>
+                                <li>Social Media:<br><span><a href="#">Facebook</a>, <a href="#">Instagram</a>, <a href="#">Behance</a>, <a href="#">Linkedin</a></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,106 @@
+{% extends 'home/base.html' %}
+{% load static %}
+{% block placeholder %}
+        <!-- ***** Main Banner Area Start ***** -->
+    <div class="page-heading" id="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="inner-content">
+                        <h2>Details EYE GLASSES</h2>
+                        <span>Information about eye glasses</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+
+
+    <!-- ***** Product Area Starts ***** -->
+    <section class="section" id="product">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="left-images">
+                        <img style="object-fit: cover" class="w-100 p-5" id="image" src="{{ item.image }}" alt="">
+                    </div>
+                    <div class="container row w-75 p-2">
+                        <div class="item p-2 col-lg-3">
+                            <div class="itemImage" onclick="scrap()" style="border: 1px solid #cccccc; border-radius: 5px; padding: 20px">
+                                <img id="smallImage" class="w-100" src="{{ item.image }}">
+                            </div>
+                        </div>
+                        <div class="item p-2 col-lg-3">
+                            <div class="itemImage" onclick="scrap()" style="border: 1px solid #cccccc; border-radius: 5px; padding: 20px">
+                                <img id="smallImage" class="w-100" src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/vincent-chase-vc-e14934-c3-eyeglasses_g_0016_07_07_2022.jpg" onlick="change(this.src)">
+                            </div>
+                        </div>
+                        <div class="item p-2 col-lg-3">
+                            <div class="itemImage" onclick="scrap()" style="border: 1px solid #cccccc; border-radius: 5px; padding: 20px">
+                                <img id="smallImage" class="w-100" src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/vincent-chase-vc-e14934-c3-eyeglasses_g_0016_07_07_2022.jpg" onlick="change(this.src)">
+                            </div>
+                        </div>
+                        <div class="item p-2 col-lg-3">
+                            <div class="itemImage" onclick="scrap()" style="border: 1px solid #cccccc; border-radius: 5px; padding: 20px">
+                                <img id="smallImage" class="w-100" src="https://static5.lenskart.com/media/catalog/product/pro/1/thumbnail/628x301/9df78eab33525d08d6e5fb8d27136e95//v/i/vincent-chase-vc-e14934-c3-eyeglasses_g_0016_07_07_2022.jpg" onlick="change(this.src)">
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            <div class="col-lg-4">
+                <div class="right-content">
+                    <h4>{{ item.product }}</h4>
+                    <span class="price">${{ item.price }}</span>
+                    <span>{{ item.description }}</span>
+                    <div class="quote">
+                        <i class="fa fa-quote-left"></i><p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiuski smod.</p>
+                        <div class="btn w-100 mt-3 bg-primary"><a href="#tryon" style="color: white " >Try On</a></div>
+                    </div>
+
+
+                    <div class="quantity-content">
+                        <div class="left-content">
+                            <h6>No. of Orders</h6>
+                        </div>
+                        <div class="right-content">
+                            <div class="quantity buttons_added">
+                                    <input  type="number"  min="1" max="5"value="1" id="number_product" size="1" class="form-control input-text qty text w-100" name="quantity" title="Qty"/>
+{#                                <input type="number" step="1" min="1" max="" id="number_product" name="quantity" value="1" title="Qty" class="input-text qty text" size="4" pattern="" inputmode=""><input type="button" onclick="btn()" id="plus_button" value="+" class="plus">#}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="total">
+{#                        <h4>Total: $210.00</h4>#}
+                        <div class="main-border-button"><a href="#" onclick="addCart({{ item.id }})">Add To Cart</a></div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container align-content-between mt-5" id="tryon"  >
+        <hr>
+        <h2 class="mt-3">Try-on {{ item.product }}</h2>
+        <div class="row">
+            <label class="label btn btn-success col-lg-3 m-2">
+                <input type="file" style="display: none" onchange="readURL(this)" required/>
+                <span>Select a file</span>
+            </label>
+            <div class="col-lg-2 m-2">
+                <a type="button" href="/try-on/{{ item.id }}" class="btn btn-primary">Try-on</a>
+            </div>
+        </div>
+        <div style="height: 520px; width: 280px" class="mt-3">
+        {% if image %}
+                <img id="blah" style=" width: 100%"   src="{% static image %}" alt="your image" />
+        {% else %}
+                <img id="blah" style="display: none; width: 100%"   src="#" alt="your image" />
+        {% endif %}
+        </div>
+
+    </section>
+
+{% endblock %}

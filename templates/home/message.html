@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script>
+        var list = document.getElementsByClassName("no");
+        for (var i = 1; i <= list.length; i++) {
+            list[i].innerHTML = i;
+        }
+    </script>
+</head>
+<body style="width: 75%">
+
+    <div style="align-content: center;text-align: center">
+        <h4>Glasses EYE</h4>
+        <p>www.glasses-eye.com</p>
+        <p>03862738982</p>
+        <hr>
+    </div>
+    <div class="content">
+        <div class="left-content" style="float: left; width: 50%">
+            <h5>Customer name: {{ name }}</h5>
+            <h5>Address: {{ add }}</h5>
+            <h5>Phone number: {{ phone }}</h5>
+        </div>
+        <div class="right-content" style="">
+            <h5>Bill No. {{ bill }}</h5>
+            <h5>Bill Date: {{ date }}</h5>
+            <table style="width: 50%;border: 1px solid #7a7a7a">
+                <tr>
+                    <td>No</td>
+                    <td>Product</td>
+                    <td>Quality</td>
+                    <td>Price</td>
+                </tr>
+            {% if cart %}
+                {% for key, value in cart.items %}
+                <tr>
+                    <td class="no"></td>
+                    <td>{{ value.name }}</td>
+                    <td>{{ value.number }}</td>
+                    <td>{{ value.price }}</td>
+                </tr>
+                {% endfor %}
+            {% endif %}
+            </table>
+            <div style="float:right;">
+                <h5>Price Total: {{ price }}</h5>
+                <h5>Charges: {{ charges }}</h5>
+                <hr>
+                <h5>Total Bill: {{ total }}</h5>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

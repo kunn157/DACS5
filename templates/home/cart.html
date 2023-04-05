@@ -1,0 +1,10 @@
+{% extends 'home/base.html' %}
+{% if cart %}
+    {{ cart }}
+{% endif %}
+{% block placeholder %}
+    {% load static %}
+        <img src='{% static image %}'>
+        <input type="file" id="test">
+        <button id="tryon">try on</button>
+{% endblock %}

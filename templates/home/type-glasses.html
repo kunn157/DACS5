@@ -1,0 +1,138 @@
+{% extends 'home/base.html' %}
+{% load mathfilters %}
+{% block placeholder %}
+
+    <!-- ***** Main Banner Area Start ***** -->
+    <div class="page-heading about-page-heading" id="top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="inner-content">
+                        <h2>Glasses For {{ gender }}</h2>
+                        <span>The best chooses for {{ gender }}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- ***** Main Banner Area End ***** -->
+
+    <!-- ***** Contact Area Starts ***** -->
+    <div class="contact-us mt-0" style="">
+        <div class="container">
+            <div class="row " id="women">
+                <div class="col-lg-3 mt-4">
+                    <div class="section-heading">
+                        <h2 class="text-dark" style="font-size: 27px;">Frame of Glasses</h2>
+                    </div>
+                    <div style="height: 370px">
+                        <table class="table" >
+                                {% for item in frame %}
+                                    <tr class="w-100" style="border: #95999c solid 0.5px; border-radius: 5px; box-shadow: 7px 7px rgba(72,72,72,0.75); padding: 3px">
+
+                                        <td class="p-3 w-100" style="width: auto">
+                                            <a href="/type-glasses/{{ gender }}/{{ item.id }}" class="product-title" style="font-size: 13px; color: black">{{ item.frame }}</a>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+
+                        </table>
+                    </div>
+                </div>
+                <div class="col-lg-9" >
+                    <div class="section-heading text-lg-right">
+                        <h2>Glasses : Frame {{ name }}</h2>
+                        <span>Result: {{ product.count }} products searched</span>
+                    </div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <div class="men-item-carousel">
+                                    <div class="row">
+                                    {% if count > 0 %}
+                                        {% for item in product %}
+                                        <div class="item col-lg-4 col-xs-12 col-sm-6 col-md-4 mb-5">
+                                            <div class="thumb"  style="border: 1px solid #ebebeb; padding: 5px; border-radius: 2px">
+                                                <div class="hover-content">
+                                                    <ul>
+                                                        <li><a href="/single-product/{{ item.id }}"><i class="fa fa-eye"></i></a></li>
+                                                        <li><a href="javascript:void(0)" onclick="addCart({{ item.id }})" ><i class="fa fa-shopping-cart"></i></a></li>
+                                                    </ul>
+                                                </div>
+                                                <img class="p-4 w-100" src="{{ item.image }}" alt="{{ item.product }}">
+                                            </div>
+                                            <div class="down-content">
+                                                <h5 style="color: #0c5460">{{ item.product }}</h5>
+                                                <p style="font-size: 15px; color: #ffc107">${{ item.price }}</p>
+                                                <span style="font-size: 15px">{{ item.description }}</span>
+                                            </div>
+                                        </div>
+                                        {% endfor %}
+                                    {% else %}
+                                        <p>No product searched</p>
+                                    {% endif %}
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ***** Contact Area Ends ***** -->
+
+    <!-- ***** Subscribe Area Starts ***** -->
+    <div class="subscribe">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="section-heading">
+                        <h2>By Subscribing To Our Newsletter You Can Get 30% Off</h2>
+                        <span>Details to details is what makes shop different from the other shop.</span>
+                    </div>
+                    <form id="subscribe" action="" method="get">
+                        <div class="row">
+                          <div class="col-lg-5">
+                            <fieldset>
+                              <input name="name" type="text" id="name" placeholder="Your Name" required="">
+                            </fieldset>
+                          </div>
+                          <div class="col-lg-5">
+                            <fieldset>
+                              <input name="email" type="text" id="email" pattern="[^ @]*@[^ @]*" placeholder="Your Email Address" required="">
+                            </fieldset>
+                          </div>
+                          <div class="col-lg-2">
+                            <fieldset>
+                              <button type="submit" id="form-submit" class="main-dark-button"><i class="fa fa-paper-plane"></i></button>
+                            </fieldset>
+                          </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-lg-4">
+                    <div class="row">
+                        <div class="col-6">
+                            <ul>
+                                <li>Store Location:<br><span>Sunny Isles Beach, FL 33160, United States</span></li>
+                                <li>Phone:<br><span>010-020-0340</span></li>
+                                <li>Office Location:<br><span>North Miami Beach</span></li>
+                            </ul>
+                        </div>
+                        <div class="col-6">
+                            <ul>
+                                <li>Work Hours:<br><span>07:30 AM - 9:30 PM Daily</span></li>
+                                <li>Email:<br><span>glasseseye@company.com</span></li>
+                                <li>Social Media:<br><span><a href="#">Facebook</a>, <a href="#">Instagram</a>, <a href="#">Behance</a>, <a href="#">Linkedin</a></span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

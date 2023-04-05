@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+{% load static %}
+{% load mathfilters %}
+<html lang="en">
+<head>
+        <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap" rel="stylesheet">
+
+    <title>The best choose for your eyes</title>
+
+
+    <!-- Additional CSS Files -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/templatemo-hexashop.css' %}">
+
+    <link rel="stylesheet" href="{% static 'css/owl-carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.css' %}">
+    <link rel="stylesheet" href="{% static 'css/owl.carousel.min.css' %}">
+
+
+
+    <link rel="stylesheet" href="{% static 'css/lightbox.css' %}">
+    <style>
+              label.label input[type="file"] {
+        position: absolute;
+        top: -1000px;
+      }
+      .label {
+        cursor: pointer;
+        border: 1px solid rgba(204, 204, 204, 0);
+        border-radius: 5px;
+        padding: 5px 15px;
+        margin: 5px;
+        background: #dddddd;
+        display: inline-block;
+      }
+      .label:hover {
+        background: rgba(96, 95, 95, 0.65);
+      }
+      .label:invalid + span {
+        color: #000000;
+      }
+      .label:valid + span {
+        color: #ffffff;
+      }
+    </style>
+{#    <script src="{% static 'owl.carousel.js' %}"></script>#}
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script>
+        function addCart(id) {
+
+            num_old = $("#numberProductOld"+id).val();
+            num_new = $("#numberProduct"+id).val();
+            num1 = 0;
+            price = $("#priceProduct"+id).val();
+
+            if ($('#numberProduct'+id).val()>=1)
+            {
+                   let num = document.getElementById("number_product");
+                   if (num_new != num_old){
+                       num1 = parseFloat(num_new) - parseFloat(num_old);
+                       $("#numberProductOld"+id).val(parseFloat(num_old)+ num1);
+                   }
+                   if (!num) {
+                            num1 = 1;
+                   }
+                   else {
+                       num1 = num;
+                   }
+
+            }
+            else {
+                if (!num) {
+                    num1 = 1;
+                }
+                else
+                    num1= num;
+            }
+            $.ajax({
+                   url: '/addCart',
+                   type: 'POST',
+                   data: {
+                       id: id,
+                       num: num1,
+                       csrfmiddlewaretoken: '{{ csrf_token }}'
+                   } ,
+                    dataType: 'json'
+            });
+            if (num1 > 0){
+                swal({
+                  title: "Good job!",
+                  text: "You added "+num1+" product to cart",
+                  icon: "success",
+                });
+            }
+
+
+            document.getElementById("linePrice"+id).innerText = parseFloat(parseFloat(price) * parseFloat(num_new)).toFixed(1);
+        }
+        function deleteProduct(id) {
+            swal({
+              title: "Are you sure?",
+              text: "Once deleted, you will not be able to recover this imaginary file!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((willDelete) => {
+              if (willDelete) {
+                  $.ajax({
+                       url: '/delete',
+                       type: 'POST',
+                       data: {
+                           id: id,
+                           csrfmiddlewaretoken: '{{ csrf_token }}'
+                       } ,
+                        dataType: 'json'
+                  });
+                document.getElementById("items"+id).style.display = "none";
+                swal("Poof! Your product has been deleted!", {
+                  icon: "success",
+                });
+              } else {
+                swal("Your product is safe!");
+              }
+            });
+
+        }
+        function scrap() {
+            $('.itemImage > img').click(function () {
+               var $smallImages = $(this).attr('src');
+               $('#image').attr('src', $smallImages);
+            });
+        }
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $('#blah').attr('src', e.target.result);
+
+                     console.log(e.target.result);
+                     $.ajax({
+                       url: '/save-image',
+                       type: 'POST',
+                       data: {
+                           url_image: e.target.result,
+                           csrfmiddlewaretoken: '{{ csrf_token }}'
+                       } ,
+                        dataType: 'json'
+                  });
+                     document.getElementById("blah").style.display = "";
+                    document.getElementById("predict").style.display = "";
+                    document.getElementById("gender_id").style.display = "";
+                }
+
+                reader.readAsDataURL(input.files[0]);
+
+            }
+              if (file.type && !file.type.startsWith('image/')) {
+                console.log('File is not an image.', file.type, file);
+                return;
+              }
+
+
+        }
+        function tryOn() {
+            swal({
+              title: "Are you sure?",
+              text: "Once deleted, you will not be able to recover this imaginary file!",
+              icon: "warning",
+              buttons: true,
+              dangerMode: true,
+            })
+            .then((tryon) => {
+              if (tryon) {
+                  $.ajax({
+                       url: '/try-on',
+                       type: 'POST',
+                       data: {
+                           id: '123',
+                           csrfmiddlewaretoken: '{{ csrf_token }}'
+                       } ,
+                        dataType: 'json'
+                  });
+
+                swal("Poof! Your product has been deleted!", {
+                  icon: "success",
+                });
+              } else {
+                swal("Your product is safe!");
+              }
+            });
+        }
+
+
+    </script>
+    <script type="text/javascript">
+        $(window).on('load', function() {
+            $('#modal_tryon').modal('show');
+        });
+    </script>
+</head>
+<body>
+    <!-- ***** Header Area Start ***** -->
+    <header class="header-area header-sticky">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <nav class="main-nav">
+                        <!-- ***** Logo Start ***** -->
+                        <a href="/" class="logo">
+                            <h1 class="text-dark pt-4">Glasses Eyes</h1>
+                        </a>
+                        <!-- ***** Logo End ***** -->
+                        <!-- ***** Menu Start ***** -->
+                        <ul class="nav">
+                            <li class="scroll-to-section"><a href="/" class="active">Home</a></li>
+                            <li class="scroll-to-section"><a href="/type-glasses/men/0">Men's</a></li>
+                            <li class="scroll-to-section"><a href="/type-glasses/women/0">Women's</a></li>
+                            <li class="scroll-to-section"><a href="/type-glasses/kids/0">Kid's</a></li>
+                            <li class="submenu">
+                                <a href="javascript:;">Pages</a>
+                                <ul>
+                                    <li><a href="/predict">Classification Shape</a></li>
+                                    <li><a href="/about-us">About us</a></li>
+                                </ul>
+                            </li>
+                            <li class="scroll-to-section"><a href="/news">BLogs</a></li>
+                            <li class="scroll-to-section"><div data-toggle="modal" data-target=".bd-example-modal-lg"><img style="width: 23px" src="https://cdn-icons-png.flaticon.com/512/1170/1170678.png"></div></li>
+                        </ul>
+                        <a class='menu-trigger'>
+                            <span>Menu</span>
+                        </a>
+                        <!-- ***** Menu End ***** -->
+                    </nav>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- ***** Header Area End ***** -->
+   {% block placeholder %}
+   
+   {% endblock %}
+        <!-- ***** Footer Start ***** -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3">
+                    <div class="first-item">
+                        <div class="logo">
+                            <h1 class="text-white">Glasses Eyes</h1>
+                        </div>
+                        <ul>
+                            <li><a href="#">ABC, Da Nang, Viet Nam</a></li>
+                            <li><a href="#">glasseseye@company.com</a></li>
+                            <li><a href="#">012-320-0340</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Shopping &amp; Categories</h4>
+                    <ul>
+                        <li><a href="#">Men’s Shopping</a></li>
+                        <li><a href="#">Women’s Shopping</a></li>
+                        <li><a href="#">Kid's Shopping</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="/">Homepage</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-3">
+                    <h4>Help &amp; Information</h4>
+                    <ul>
+                        <li><a href="#">Help</a></li>
+                        <li><a href="#">FAQ's</a></li>
+                        <li><a href="#">Shipping</a></li>
+                        <li><a href="#">Tracking ID</a></li>
+                    </ul>
+                </div>
+                <div class="col-lg-12">
+                    <div class="under-footer">
+                        <p class="text-dark">Copyright © 2022 HexaShop Co., Ltd. All Rights Reserved.
+                        <ul>
+                            <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+                            <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+                            <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            <li><a href="#"><i class="fa fa-behance"></i></a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="modal fade bd-example-modal-lg w-100" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <table class="table p-5">
+                    <thead>
+                        <tr>
+                            <th colspan="2"><h2 class="" >Cart</h2></th>
+                            <th><h6>Price</h6></th>
+                            <th><h6>Quality</h6></th>
+                            <th><h6>Total</h6></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% if request.session.cart %}
+                        <input value="{{ request.session.cart }}" type="hidden" id="session_hidden">
+                        {% for key, value in request.session.cart.items %}
+                            <tr id="items{{ key }}">
+                                <input type="hidden" id="keyProduct" value="{{ key }}" >
+                                <th><img class="w-75" src="{{ value.image }}"></th>
+                                <td>
+                                    <div class="product-title">{{ value.name }}</div>
+                                    <p style="color: #95999c;font-size: 10px" class="font-italic product-description">{{ value.description }}</p>
+                                </td>
+                                <td><div class="product-price" >$<span>{{ value.price }}</span><input type="hidden" id="priceProduct{{ key }}" value="{{ value.price }}"></div></td>
+                                <td>
+                                    <div class="product-quantity">
+                                        <input class="form-control w-100" type="hidden" id="numberProductOld{{ key }}" value="{{ value.number }}" min="1">
+                                        <input class="form-control w-100" onchange="addCart({{ key }})" type="number" id="numberProduct{{ key }}" value="{{ value.number }}" min="1">
+                                    </div>
+                                </td>
+                                <td><div class="product-line-price" >$<span id="linePrice{{ key }}">{{ value.price|mul:value.number }}</span></div></td>
+                                <td>
+                                    <div class="product-removal w-50">
+                                        <div onclick="deleteProduct({{ key }})" class="btn btn-dark btn-sm remove-product">-</div>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                            <tr class="container">
+                                <td><p style=" color: #7a7a7a;">No product in your cart</p></td>
+                            </tr>
+                    {% endif %}
+
+                    </tbody>
+                </table>
+
+                <div class="p-r-5 p-l-5 mb-3">
+                    <hr>
+{#                    <div class="price">#}
+{#                      <div>#}
+{#                          <ul>#}
+{#                              <li class="d-flex">#}
+{#                                  <p class="mr-5 mr-auto" style="color: #95999c;font-size: 14px">Subtotal</p>#}
+{#                                  <span class="p-l-5 ml-auto" >$<span id="total"></span></span>#}
+{#                              </li>#}
+{#                              <li class="d-flex">#}
+{#                                  <p class="mr-5 mr-auto" style="color: #95999c;font-size: 14px">Tax(3%) - Shipping</p>#}
+{#                                  <span class="p-l-5 ml-auto">$<span id="tax"></span></span>#}
+{#                              </li>#}
+{#                              <li class="d-flex">#}
+{#                                  <p class="mr-5" style="color: #95999c;font-size: 14px">Grand Total </p>#}
+{#                                  <span class="p-l-5 ml-auto">$<span id="grandTotal"></span></span>#}
+{#                              </li>#}
+{#                          </ul>#}
+{#                      </div>#}
+                      <div class=" mt-3 d-flex justify-content-center">
+                          <a href="/checkout" class="btn btn-success">Checkout</a>
+                      </div>
+
+                  </div>
+              </div>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <script>
+    var close = document.getElementsByClassName("closebtn");
+    var i;
+
+    for (i = 0; i < close.length; i++) {
+      close[i].onclick = function(){
+        var div = this.parentElement;
+        div.style.opacity = "0";
+        setTimeout(function (){div.style.display = "none"}, 600);
+      }
+    }
+    </script>
+
+    <!-- jQuery -->
+    <script src="{% static 'js/jquery-2.1.0.min.js' %}"></script>
+
+    <!-- Bootstrap -->
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+
+    <!-- Plugins -->
+    <script src="{% static 'js/owl-carousel.js' %}"></script>
+    <script src="{% static 'js/accordions.js' %}"></script>
+    <script src="{% static 'js/datepicker.js' %}"></script>
+    <script src="{% static 'js/scrollreveal.min.js' %}"></script>
+    <script src="{% static 'js/waypoints.min.js' %}"></script>
+    <script src="{% static 'js/jquery.counterup.min.js' %}"></script>
+    <script src="{% static 'js/imgfix.min.js' %}"></script>
+    <script src="{% static 'js/slick.js' %}"></script>
+    <script src="{% static 'js/lightbox.js' %}"></script>
+    <script src="{% static 'js/isotope.js' %}"></script>
+
+    <!-- Global Init -->
+    <script type="text/html" src="assets/js/custom.js"></script>
+    <script>
+        {#$('table').focus();#}
+        {##}
+        {#$('input[type=file]').change(function () {#}
+        {#    console.log(this.files[0].mozFullPath);#}
+        {#});#}
+        {#const fileInput = document.getElementById('test');#}
+        {#    fileInput.onchange = () => {#}
+        {#      console.log(fileInput.val());#}
+        {#    }#}
+
+        var j = document.getElementById("session_hidden").value;
+        j = j.replaceAll(/'/g,'"');
+        j = JSON.parse(j);
+        var total=0;
+        var tax=0;
+        var grand_total=0;
+
+        for (let key in j) {
+            var num = document.getElementById("numberProduct"+key).value;
+            var price = document.getElementById("priceProduct"+key).value;
+            total += parseFloat(price)*parseFloat(num);
+        }
+        document.getElementById("total").innerText = total.toFixed(2);
+        document.getElementById("tax").innerText = (total*3/100).toFixed(2);
+        document.getElementById("grandTotal").innerText = (total + total*3/100).toFixed(2);
+        {#process camera#}
+
+
+        $(function() {
+            var selectedClass = "";
+            $("p").click(function(){
+            selectedClass = $(this).attr("data-rel");
+            $("#portfolio").fadeTo(50, 0.1);
+                $("#portfolio div").not("."+selectedClass).fadeOut();
+            setTimeout(function() {
+              $("."+selectedClass).fadeIn();
+              $("#portfolio").fadeTo(50, 1);
+            }, 500);
+
+            });
+        });
+
+
+
+        function changeNumber(key) {
+
+            alert(name)
+            var num = document.getElementById("numberProduct"+key).value;
+            var price = document.getElementById("priceProduct"+key).value;
+            document.getElementById("linePrice"+key).innerText = (parseFloat(price)*parseFloat(num)).toFixed(1);
+            var j = document.getElementById("session_hidden").value;
+            j = j.replaceAll(/'/g,'"');
+            j = JSON.parse(j);
+            var total=0;
+            for (let key1 in j) {
+                var num1 = document.getElementById("numberProduct"+key1).value;
+                var price1 = document.getElementById("priceProduct"+key1).value;
+                total += parseFloat(price1)*parseFloat(num1);
+            }
+            document.getElementById("total").innerText = total.toFixed(2);
+            document.getElementById("tax").innerText = (total*3/100).toFixed(2);
+            document.getElementById("grandTotal").innerText = (total + total*3/100).toFixed(2);
+
+
+        }
+
+
+    </script>
+    <script>
+            var camera_button = document.querySelector("#start-camera");
+        var video = document.querySelector("#video");
+        var click_button = document.querySelector("#click-photo");
+        var canvas = document.querySelector("#canvas");
+        var result = document.getElementById("result");
+        var tryon = document.querySelector("#tryon");
+
+        camera_button.addEventListener('click', async function() {
+            if (result){
+                document.getElementById("face")
+            }
+            var stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+            video.srcObject = stream;
+            document.getElementById("click-photo").style.display = "";
+        });
+
+        click_button.addEventListener('click', function() {
+            canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+            var image_data_url = canvas.toDataURL('image/jpeg');
+            {#var tmpLink = document.createElement( 'a' );#}
+            {#tmpLink.download = 'image.jpg'; // set the name of the download file#}
+            {#tmpLink.href = image_data_url;#}
+            $.ajax({
+                       url: '/save-image',
+                       type: 'POST',
+                       data: {
+                           url_image: image_data_url,
+                           csrfmiddlewaretoken: '{{ csrf_token }}'
+                       } ,
+                        dataType: 'json'
+                  });
+
+            // temporarily add link to body and initiate the download
+            {#document.body.appendChild( tmpLink );#}
+            {#tmpLink.click();#}
+            {#document.body.removeChild( tmpLink );#}
+
+            document.getElementById("predict").style.display = "";
+            document.getElementById("gender_id").style.display = "";
+
+        });
+            $(document).ready(function() {
+              var owl = $('.owl-carousel');
+              owl.owlCarousel({
+                margin: 10,
+                nav: true,
+                navText:  ["<div class='owl-prev pl-5'>‹</div>", "<div class='owl-next'>›</div>"],
+                loop: true,
+                responsive: {
+                  0: {
+                    items: 1
+                  },
+                  600: {
+                    items: 3
+                  },
+                  1000: {
+                    items: 3
+                  }
+                }
+              })
+            })
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+    <script>
+            var citis = document.getElementById("city");
+            var districts = document.getElementById("district");
+            var wards = document.getElementById("ward");
+            var Parameter = {
+              url: "https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json",
+              method: "GET",
+              responseType: "application/json",
+            };
+            var promise = axios(Parameter);
+            promise.then(function (result) {
+              renderCity(result.data);
+            });
+
+            function renderCity(data) {
+              for (const x of data) {
+                citis.options[citis.options.length] = new Option(x.Name, x.Id);
+              }
+              citis.onchange = function () {
+                district.length = 1;
+                ward.length = 1;
+                if(this.value != ""){
+                  const result = data.filter(n => n.Id === this.value);
+
+                  for (const k of result[0].Districts) {
+                    district.options[district.options.length] = new Option(k.Name, k.Id);
+                  }
+                }
+              };
+              district.onchange = function () {
+                ward.length = 1;
+                const dataCity = data.filter((n) => n.Id === citis.value);
+                if (this.value != "") {
+                  const dataWards = dataCity[0].Districts.filter(n => n.Id === this.value)[0].Wards;
+
+                  for (const w of dataWards) {
+                    wards.options[wards.options.length] = new Option(w.Name, w.Id);
+                  }
+                }
+              };
+            }
+	</script>
+
+</body>
+</html>
